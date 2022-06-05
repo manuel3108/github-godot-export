@@ -45527,13 +45527,15 @@ async function run() {
         core.info('Finished downloading the files!');
         core.info('Extracting godot headless...');
 
+        exec(`ls .`);
+
         Seven.extractFull(headlessGodotAsset.name, godotWorkingDir, {
             $progress: false,
         });
 
         core.info('Finished extracting the files!');
 
-        exec(`${godotWorkingDir}/${headlessGodotAsset.name}`);
+        exec(`ls ${godotWorkingDir}/${headlessGodotAsset.name}`);
     } catch (error) {
         core.setFailed(error.message);
     }
