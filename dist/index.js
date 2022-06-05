@@ -7226,14 +7226,6 @@ module.exports = eval("require")("encoding");
 
 /***/ }),
 
-/***/ 8350:
-/***/ ((module) => {
-
-module.exports = eval("require")("req");
-
-
-/***/ }),
-
 /***/ 9491:
 /***/ ((module) => {
 
@@ -7398,7 +7390,6 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const { Octokit } = __nccwpck_require__(6762);
 const fs = __nccwpck_require__(7147);
-const request = __nccwpck_require__(8350);
 
 // most @actions toolkit packages have async methods
 async function run() {
