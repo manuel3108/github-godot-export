@@ -6998,7 +6998,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(186);
 const { Octokit } = __nccwpck_require__(762);
 const fs = __nccwpck_require__(747);
-const http = __nccwpck_require__(605);
+const http = __nccwpck_require__(211);
 
 // most @actions toolkit packages have async methods
 async function run() {

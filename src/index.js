@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const { Octokit } = require('@octokit/core');
 const fs = require('fs');
-const http = require('http');
+const http = require('https');
 
 // most @actions toolkit packages have async methods
 async function run() {
