@@ -42,17 +42,8 @@ async function run() {
 }
 
 function downloadFile(uri, filename) {
-    new Promise((resolve, reject) => {
-        request.head(uri, (err, res, body) => {
-            console.log('\n', 'Downloading File');
-            request(uri)
-                .on('error', (error) => {
-                    res.status(502).send(error.message);
-                    reject(error);
-                })
-                .pipe(fs.createWriteStream(filename))
-                .on('finish', resolve);
-        });
+    new Promise((resolve) => {
+        request.get(uri).pipe(fs.createWriteStream(filename)).on('finish', resolve);
     });
 }
 
