@@ -1,13 +1,17 @@
 name: 'Wait'
 description: 'Wait a designated number of milliseconds'
 inputs:
-  godot_version:
-    description: 'the necessary version of godot'
-    required: true
-    default: '3.4.4-stable'
+    godot_version:
+        description: 'the necessary version of godot'
+        required: true
+        default: '3.4.4-stable'
+    use_mono:
+        description: 'whether to use the mono builds'
+        required: true
+        default: 'false'
 outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+    time: # output will be available to future steps
+        description: 'The current time after waiting'
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+    using: 'node16'
+    main: 'dist/index.js'

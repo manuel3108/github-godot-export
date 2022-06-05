@@ -13,3 +13,4 @@ jobs:
               uses: manuel3108/github-godot-export@main
               with:
                   godot_version: 3.4.4-stable
+                  use_mono: true
