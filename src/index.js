@@ -3,20 +3,22 @@ const { Octokit } = require('@octokit/core');
 const fs = require('fs');
 const request = require('request');
 const Seven = require('node-7z');
-const { exec } = require('child_process');
+const { exec } = require('@actions/exec');
 
 const godotWorkingDir = './.godot';
 
 // most @actions toolkit packages have async methods
 async function run() {
     try {
-        const godotVersion = core.getInput('godot_version');
-        const useMono = core.getInput('use_mono');
+        // const godotVersion = core.getInput('godot_version');
+        // const useMono = core.getInput('use_mono');
+        const godotVersion = '3.4.4-stable';
+        const useMono = true;
 
         core.info(`Godot version: ${godotVersion}`);
         core.info(`Use Mono: ${useMono}`);
 
-        core.info();
+        core.info('');
         core.info('Getting the release for the selected version...');
 
         const octokit = new Octokit();
@@ -35,31 +37,40 @@ async function run() {
         core.info(`Found headless Godot asset and downloading it from ${headlessGodotAsset.browser_download_url}`);
         core.info(`Found export templates asset and downloading it from ${exportTemplatesAsset.browser_download_url}`);
 
-        const downloadGodot = downloadFile(headlessGodotAsset.browser_download_url, headlessGodotAsset.name);
-        const downloadExportTemplates = downloadFile(exportTemplatesAsset.browser_download_url, exportTemplatesAsset.name);
-        await Promise.all([downloadGodot, downloadExportTemplates]);
+        // const downloadGodot = downloadFile(headlessGodotAsset.browser_download_url, headlessGodotAsset.name);
+        // const downloadExportTemplates = downloadFile(exportTemplatesAsset.browser_download_url, exportTemplatesAsset.name);
+        // await Promise.all([downloadGodot, downloadExportTemplates]);
 
         core.info('Finished downloading the files!');
         core.info('Extracting godot headless...');
 
-        exec(`ls .`);
-
-        Seven.extractFull(headlessGodotAsset.name, godotWorkingDir, {
-            $progress: false,
-        });
+        await extractFile(headlessGodotAsset.name, godotWorkingDir);
 
         core.info('Finished extracting the files!');
 
-        exec(`ls ${godotWorkingDir}/${headlessGodotAsset.name}`);
+        exec(`${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`);
     } catch (error) {
         core.setFailed(error.message);
     }
 }
 
-function downloadFile(uri, filename) {
-    new Promise((resolve) => {
+async function extractFile(fileName, destination) {
+    return new Promise((resolve) => {
+        const myStream = Seven.extractFull(fileName, destination, {
+            $progress: false,
+            noRootDuplication: true,
+        });
+        myStream.on('end', function () {
+            resolve();
+        });
+    });
+}
+
+async function downloadFile(uri, filename) {
+    return new Promise((resolve) => {
         request.get(uri).pipe(fs.createWriteStream(filename)).on('finish', resolve);
     });
+    // await get(uri, {});
 }
 
 run().catch((err) => {

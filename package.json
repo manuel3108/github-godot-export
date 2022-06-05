@@ -25,7 +25,9 @@
   "homepage": "https://github.com/actions/javascript-action#readme",
   "dependencies": {
     "@actions/core": "^1.8.2",
+    "@actions/exec": "^1.1.1",
     "@octokit/core": "^3.6.0",
+    "async-get-file": "^1.0.4",
     "node-7z": "^3.0.0",
     "request": "^2.88.2"
   },
