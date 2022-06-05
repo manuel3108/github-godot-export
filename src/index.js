@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const { Octokit } = require('@octokit/core');
 const fs = require('fs');
-const http = require('https');
+const request = require('req');
 
 // most @actions toolkit packages have async methods
 async function run() {
@@ -41,25 +41,40 @@ async function run() {
     }
 }
 
-function getFile(url) {
-    return new Promise((resolve, reject) => {
-        http.get(url, (response) => {
-            const { statusCode } = response;
-            if (statusCode === 200) {
-                resolve(response);
-            }
-            reject(null);
+function downloadFile(uri, filename) {
+    new Promise((resolve, reject) => {
+        request.head(uri, (err, res, body) => {
+            console.log('\n', 'Downloading File');
+            request(uri)
+                .on('error', (error) => {
+                    res.status(502).send(error.message);
+                    reject(error);
+                })
+                .pipe(fs.createWriteStream(filename))
+                .on('finish', resolve);
         });
     });
 }
 
-async function downloadFile(url, fileName) {
-    const response = await getFile(url);
-    if (response) {
-        const file = fs.createWriteStream(fileName);
-        response.pipe(file);
-    }
-}
+// function getFile(url) {
+//     return new Promise((resolve, reject) => {
+//         http.get(url, (response) => {
+//             const { statusCode } = response;
+//             if (statusCode === 200) {
+//                 resolve(response);
+//             }
+//             reject(null);
+//         });
+//     });
+// }
+
+// async function downloadFile(url, fileName) {
+//     const response = await getFile(url);
+//     if (response) {
+//         const file = fs.createWriteStream(fileName);
+//         response.pipe(file);
+//     }
+// }
 
 run().catch((err) => {
     core.setFailed(err.message);
