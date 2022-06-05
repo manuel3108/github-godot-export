@@ -2,6 +2,10 @@ const core = require('@actions/core');
 const { Octokit } = require('@octokit/core');
 const fs = require('fs');
 const request = require('request');
+const Seven = require('node-7z');
+const { exec } = require('child_process');
+
+const godotWorkingDir = './.godot';
 
 // most @actions toolkit packages have async methods
 async function run() {
@@ -36,6 +40,15 @@ async function run() {
         await Promise.all([downloadGodot, downloadExportTemplates]);
 
         core.info('Finished downloading the files!');
+        core.info('Extracting godot headless...');
+
+        Seven.extractFull(headlessGodotAsset.name, godotWorkingDir, {
+            $progress: false,
+        });
+
+        core.info('Finished extracting the files!');
+
+        exec(`${godotWorkingDir}/${headlessGodotAsset.name}`);
     } catch (error) {
         core.setFailed(error.message);
     }
@@ -46,26 +59,6 @@ function downloadFile(uri, filename) {
         request.get(uri).pipe(fs.createWriteStream(filename)).on('finish', resolve);
     });
 }
-
-// function getFile(url) {
-//     return new Promise((resolve, reject) => {
-//         http.get(url, (response) => {
-//             const { statusCode } = response;
-//             if (statusCode === 200) {
-//                 resolve(response);
-//             }
-//             reject(null);
-//         });
-//     });
-// }
-
-// async function downloadFile(url, fileName) {
-//     const response = await getFile(url);
-//     if (response) {
-//         const file = fs.createWriteStream(fileName);
-//         response.pipe(file);
-//     }
-// }
 
 run().catch((err) => {
     core.setFailed(err.message);

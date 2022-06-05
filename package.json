@@ -26,6 +26,7 @@
   "dependencies": {
     "@actions/core": "^1.8.2",
     "@octokit/core": "^3.6.0",
+    "node-7z": "^3.0.0",
     "request": "^2.88.2"
   },
   "devDependencies": {
