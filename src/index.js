@@ -37,9 +37,9 @@ async function run() {
         core.info(`Found headless Godot asset and downloading it from ${headlessGodotAsset.browser_download_url}`);
         core.info(`Found export templates asset and downloading it from ${exportTemplatesAsset.browser_download_url}`);
 
-        // const downloadGodot = downloadFile(headlessGodotAsset.browser_download_url, headlessGodotAsset.name);
-        // const downloadExportTemplates = downloadFile(exportTemplatesAsset.browser_download_url, exportTemplatesAsset.name);
-        // await Promise.all([downloadGodot, downloadExportTemplates]);
+        const downloadGodot = downloadFile(headlessGodotAsset.browser_download_url, headlessGodotAsset.name);
+        const downloadExportTemplates = downloadFile(exportTemplatesAsset.browser_download_url, exportTemplatesAsset.name);
+        await Promise.all([downloadGodot, downloadExportTemplates]);
 
         core.info('Finished downloading the files!');
         core.info('Extracting godot headless...');
