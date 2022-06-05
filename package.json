@@ -1,12 +1,11 @@
 {
-  "name": "javascript-action",
+  "name": "github-godot-export",
   "version": "1.0.0",
   "description": "JavaScript Action Template",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "eslint .",
-    "prepare": "ncc build index.js -o dist --source-map --license licenses.txt",
-    "test": "jest",
+    "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt",
     "all": "npm run lint && npm run prepare && npm run test"
   },
   "repository": {
@@ -29,7 +28,6 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.31.1",
-    "eslint": "^8.0.0",
-    "jest": "^27.2.5"
+    "eslint": "^8.0.0"
   }
 }

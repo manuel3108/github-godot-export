@@ -1,0 +1,15 @@
+on:
+    push:
+        branches:
+            - main
+jobs:
+    export_game:
+        runs-on: ubuntu-latest
+        name: Export game
+        steps:
+            - name: checkout
+              uses: actions/checkout@v2.0.0
+            - name: export godot
+              uses: manuel3108/github-godot-export
+              with:
+                  godot_version: 3.4.4-stable
