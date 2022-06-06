@@ -12,6 +12,7 @@ async function run() {
     try {
         const godotVersion = core.getInput('godot_version');
         const useMono = core.getInput('use_mono');
+        const baseDir = core.getInput('base_dir');
         const exportTemplates = JSON.parse(core.getInput('export_templates'));
 
         core.info(`Godot version: ${godotVersion}`);
@@ -50,7 +51,7 @@ async function run() {
         const godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
 
         exportTemplates.forEach((exportTemplate) => {
-            exec(godotExecutable, ['--export', `"${exportTemplate}"`, 'some_name.exe']);
+            exec(godotExecutable, ['--path', baseDir, '--export', `"${exportTemplate}"`, 'some_name.exe']);
         });
     } catch (error) {
         core.setFailed(error.message);
