@@ -80,7 +80,6 @@ async function downloadFile(uri, filename) {
     return new Promise((resolve) => {
         request.get(uri).pipe(fs.createWriteStream(filename)).on('finish', resolve);
     });
-    // await get(uri, {});
 }
 
 run().catch((err) => {

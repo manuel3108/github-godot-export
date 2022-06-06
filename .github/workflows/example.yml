@@ -9,6 +9,8 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v2.0.0
+            - name: Setup tmate session
+              uses: mxschmitt/action-tmate@v3
             - name: export godot
               uses: manuel3108/github-godot-export@main
               with:
