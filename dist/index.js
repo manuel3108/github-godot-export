@@ -47063,7 +47063,7 @@ async function run() {
         let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
         godotExecutable = path.resolve(godotExecutable);
 
-        var config = ini.parse(fs.readFileSync('./examples/godot_3.4.4_mono/export_presets.cfg', 'utf-8'));
+        var config = ini.parse(fs.readFileSync(path.join(baseDir, 'export_presets.cfg'), 'utf-8'));
         const exportTemplates = Object.entries(config.preset).map(([_, value]) => value);
         exportTemplates.forEach((exportTemplate) => {
             fs.mkdirSync(exportTemplate.export_path, { recursive: true });
