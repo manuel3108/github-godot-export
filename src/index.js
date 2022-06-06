@@ -5,6 +5,7 @@ const path = require('path');
 const request = require('request');
 const Seven = require('node-7z');
 const { exec } = require('@actions/exec');
+const ini = require('ini');
 
 const godotWorkingDir = './.godot';
 
@@ -13,7 +14,6 @@ async function run() {
         const godotVersion = core.getInput('godot_version');
         const useMono = core.getInput('use_mono');
         const baseDir = core.getInput('base_dir');
-        const exportTemplates = JSON.parse(core.getInput('export_templates'));
 
         core.info(`Godot version: ${godotVersion}`);
         core.info(`Use Mono: ${useMono}`);
@@ -60,8 +60,11 @@ async function run() {
         let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
         godotExecutable = path.resolve(godotExecutable);
 
+        var config = ini.parse(fs.readFileSync('./examples/godot_3.4.4_mono/export_presets.cfg', 'utf-8'));
+        const exportTemplates = Object.entries(config.preset).map(([_, value]) => value);
         exportTemplates.forEach((exportTemplate) => {
-            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate}`, 'some_name.exe', '--verbose']);
+            fs.mkdirSync(exportTemplate.export_path, { recursive: true });
+            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path, '--verbose']);
         });
     } catch (error) {
         core.setFailed(error.message);
