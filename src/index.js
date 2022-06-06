@@ -70,21 +70,20 @@ async function run() {
 
             const exportDirectoryPath = path.dirname(path.join(baseDir, exportTemplate.export_path));
             const exportDirectoryName = path.basename(exportDirectoryPath);
-            var files = glob.sync(`${exportDirectoryPath}/**/*.*`);
-            core.info(files);
+            var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
             if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
                 core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
                 await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
 
                 core.info(`Finished zipping files!`);
-                // core.info(`Deleting zipped files...`);
+                core.info(`Deleting zipped files...`);
 
-                // files.forEach((file) => {
-                //     fs.unlinkSync(file);
-                // });
+                files.forEach((file) => {
+                    fs.unlinkSync(file);
+                });
 
-                // core.info(`Finished deleting files!`);
+                core.info(`Finished deleting files!`);
             } else {
                 core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
 
