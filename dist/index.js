@@ -46778,10 +46778,10 @@ const godotWorkingDir = './.godot';
 // most @actions toolkit packages have async methods
 async function run() {
     try {
-        // const godotVersion = core.getInput('godot_version');
-        // const useMono = core.getInput('use_mono');
-        const godotVersion = '3.4.4-stable';
-        const useMono = true;
+        const godotVersion = core.getInput('godot_version');
+        const useMono = core.getInput('use_mono');
+        const baseDir = core.getInput('base_dir');
+        const exportTemplates = JSON.parse(core.getInput('export_templates'));
 
         core.info(`Godot version: ${godotVersion}`);
         core.info(`Use Mono: ${useMono}`);
@@ -46816,7 +46816,13 @@ async function run() {
 
         core.info('Finished extracting the files!');
 
-        exec(`${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`);
+        const godotExecutable = `${godotWorkingDir}/
+            ${headlessGodotAsset.name.replace('.zip', '')}/
+            ${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
+
+        exportTemplates.forEach(exportTemplate => {
+            exec(godotExecutable, ["--path", baseDir, "--export", `"${exportTemplate}", "some_name.exe`]);            
+        });
     } catch (error) {
         core.setFailed(error.message);
     }
