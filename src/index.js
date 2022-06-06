@@ -7,6 +7,7 @@ const Seven = require('node-7z');
 const { exec } = require('@actions/exec');
 const ini = require('ini');
 const glob = require('glob');
+const os = require('os');
 
 const godotWorkingDir = './.godot';
 
@@ -21,10 +22,20 @@ async function run() {
         core.info(`Base directory: ${baseDir}`);
 
         const godotExecutable = await downloadAndPrepareGodot(godotVersion, useMono);
+        setupEditorSettings();
         await buildAndPostProcess(godotExecutable, baseDir);
     } catch (error) {
         core.setFailed(error.message);
     }
+}
+
+function setupEditorSettings() {
+    const editorSettingsFileName = 'editor_settings-3.tres';
+    const settingsFolderPath = path.resolve(path.join(os.homedir(), '/.config/godot'));
+    const editorSettingsDist = path.join(__dirname, editorSettingsFileName);
+
+    fs.mkdirSync(settingsFolderPath, { recursive: true });
+    fs.copyFileSync(editorSettingsDist, path.join(settingsFolderPath, editorSettingsFileName));
 }
 
 async function downloadAndPrepareGodot(godotVersion, useMono) {
@@ -116,8 +127,8 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
 async function compressFile(fileName, destination) {
     return new Promise((resolve) => {
         const myStream = Seven.add(destination, fileName, {
+            $raw: [],
             $progress: false,
-            noRootDuplication: true,
         });
         myStream.on('end', function () {
             resolve();
@@ -129,7 +140,6 @@ async function extractFile(fileName, destination) {
     return new Promise((resolve) => {
         const myStream = Seven.extractFull(fileName, destination, {
             $progress: false,
-            noRootDuplication: true,
         });
         myStream.on('end', function () {
             resolve();

@@ -1,0 +1,50 @@
+name: Example 2 (Mono)
+
+on:
+    push:
+        branches:
+            - main
+jobs:
+    export_game:
+        runs-on: ubuntu-latest
+        name: Export game
+        steps:
+            - name: checkout
+              uses: actions/checkout@v2.0.0
+
+            # Setup Java
+            - name: Set up JDK 17.0.3+7
+              uses: actions/setup-java@v3
+              with:
+                  distribution: 'temurin'
+                  java-version: 17.0.3+7
+
+            # Setup Android
+            - name: Setup Android SDK
+              uses: android-actions/setup-android@v2
+
+            # Read the version from a txt file so we can also use this version in our application
+            - name: Read version.txt
+              id: version
+              uses: juliangruber/read-file-action@v1
+              with:
+                  path: ./examples/godot_3.4.4_android/version.txt
+
+            # Call the export godot action to build and zip the executables for the different targets
+            # Provides a comma separated list of generated files, used to i.e. generate a new release
+            - name: export godot
+              id: godot
+              uses: manuel3108/github-godot-export@main
+              with:
+                  godot_version: 3.4.4-stable
+                  use_mono: true
+                  base_dir: ./examples/godot_3.4.4_android/
+
+            # Use the generated artifacts and the version read from a file to create a new github release
+            - name: create release
+              uses: ncipollo/release-action@v1
+              with:
+                  artifacts: ${{ steps.godot.outputs.artifacts }}
+                  generateReleaseNotes: true
+                  tag: v${{ steps.version.outputs.content }}
+                  token: ${{ secrets.GITHUB_TOKEN }}

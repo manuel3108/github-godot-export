@@ -10,7 +10,7 @@ config_version=4
 
 [application]
 
-config/name="Github-Godot-Export-Demo-Mono"
+config/name="Github-Godot-Export-Demo"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
