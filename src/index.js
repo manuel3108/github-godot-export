@@ -46,7 +46,7 @@ async function run() {
 
         await extractFile(headlessGodotAsset.name, godotWorkingDir);
 
-        const templatesPathString = `/home/runner/.local/share/godot/templates/`;
+        const templatesPathString = `/home/runner/.local/share/godot/templates/${godotVersion}${useMono ? '.mono' : ''}/`;
         fs.mkdirSync(templatesPathString, { recursive: true });
         await extractFile(exportTemplatesAsset.name, templatesPathString);
         // fs.renameSync(`${templatesPathString}templates`, `${templatesPathString}${godotVersion}${useMono ? '.mono' : ''}`);
