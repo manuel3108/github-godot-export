@@ -80,7 +80,6 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
         const exportDirectoryPath = path.dirname(path.join(baseDir, exportTemplate.export_path));
         const exportDirectoryName = path.basename(exportDirectoryPath);
         var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
-        core.info(files);
         if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
             core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
