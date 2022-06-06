@@ -53,7 +53,7 @@ async function run() {
         godotExecutable = path.resolve(godotExecutable);
 
         exportTemplates.forEach((exportTemplate) => {
-            exec(godotExecutable, [baseDir, '--export', `${exportTemplate}`, 'some_name.exe', '--verbose']);
+            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate}`, 'some_name.exe', '--verbose']);
         });
     } catch (error) {
         core.setFailed(error.message);
