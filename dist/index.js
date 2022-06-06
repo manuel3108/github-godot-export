@@ -46819,7 +46819,7 @@ async function run() {
         const godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
 
         exportTemplates.forEach((exportTemplate) => {
-            exec(godotExecutable, ['--path', baseDir, '--export', `"${exportTemplate}", "some_name.exe`]);
+            exec(godotExecutable, ['--path', baseDir, '--export', `"${exportTemplate}"`, 'some_name.exe']);
         });
     } catch (error) {
         core.setFailed(error.message);
