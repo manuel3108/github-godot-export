@@ -1,5 +1,6 @@
 node_modules/
 .godot/
+examples/godot_3.4.4_mono/.mono/
 
 # Editors
 .vscode/

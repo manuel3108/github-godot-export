@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Main.cs" type="Script" id=1]
 
 [sub_resource type="CubeMesh" id=1]
 
 [node name="Spatial" type="Spatial"]
+script = ExtResource( 1 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.859745, 0.510723, 0, -0.510723, 0.859745, 0, 2.65499, 2.23295 )
