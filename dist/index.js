@@ -50314,7 +50314,7 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
         const exportDirectoryName = path.basename(exportDirectoryPath);
 
         fs.mkdirSync(exportDirectoryPath, { recursive: true });
-        // await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportPath]);
+        await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
 
         // var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
         // if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
