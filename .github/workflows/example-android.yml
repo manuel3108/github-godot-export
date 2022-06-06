@@ -40,9 +40,6 @@ jobs:
                   use_mono: true
                   base_dir: ./examples/godot_3.4.4_android/
 
-            - name: Setup tmate session
-              uses: mxschmitt/action-tmate@v3
-
             # Use the generated artifacts and the version read from a file to create a new github release
             - name: create release
               uses: ncipollo/release-action@v1
