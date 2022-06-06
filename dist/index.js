@@ -46814,10 +46814,11 @@ async function run() {
 
         await extractFile(headlessGodotAsset.name, godotWorkingDir);
 
-        const templatesPathString = `/home/runner/.local/share/godot/templates/${godotVersion}${useMono ? '.mono' : ''}/`;
-        fs.mkdirSync(templatesPathString, { recursive: true });
-        await extractFile(exportTemplatesAsset.name, templatesPathString);
-        // fs.renameSync(`${templatesPathString}templates`, `${templatesPathString}${godotVersion}${useMono ? '.mono' : ''}`);
+        const templatesPathString = `/home/runner/.local/share/godot/templates/`;
+        const templatesTempPathString = templatesPathString + 'temp/';
+        fs.mkdirSync(templatesTempPathString, { recursive: true });
+        await extractFile(exportTemplatesAsset.name, templatesTempPathString);
+        fs.renameSync(`${templatesPathString}temp/templates/`, `${templatesPathString}${godotVersion}${useMono ? '.mono' : ''}/`);
 
         core.info('Finished extracting the files!');
 
