@@ -69,12 +69,13 @@ async function run() {
             exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
 
             if (zipExportIfMultipleFiles) {
-                const exportDirectoryName = path.dirname(exportTemplate.export_path);
-                var files = glob.sync(`${exportDirectoryName}/**/*.*`);
+                const exportDirectoryPath = path.dirname(exportTemplate.export_path);
+                const exportDirectoryName = path.basename(exportDirectoryPath);
+                var files = glob.sync(`${exportDirectoryPath}/**/*.*`);
                 if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
-                    core.info(`Found ${files.length} files in ${exportDirectoryName}. Zipping files...`);
+                    core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
-                    await compressFile(`${exportDirectoryName}`, `${exportDirectoryName}/${exportDirectoryName}.zip`);
+                    await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
 
                     core.info(`Finished zipping files!`);
                     core.info(`Deleting zipped files...`);
@@ -85,10 +86,10 @@ async function run() {
 
                     core.info(`Finished deleting files!`);
                 } else {
-                    core.info(`Found ${files.length} files in ${exportDirectoryName}. Skipping zipping...`);
+                    core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
 
                     const fileExtensions = path.extname(files[0]);
-                    fs.renameSync(files[0], `${exportDirectoryName}/${exportDirectoryName}${fileExtensions}`);
+                    fs.renameSync(files[0], `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`);
 
                     core.info(`Finished renaming files!`);
                 }
