@@ -46815,6 +46815,10 @@ async function run() {
 
         await extractFile(headlessGodotAsset.name, godotWorkingDir);
 
+        const templatesPathString = `/home/runner/.local/share/godot/templates/${godotVersion}${useMono ? '.mono' : ''}/`;
+        fs.mkdirSync(templatesPathString, { recursive: true });
+        await extractFile(exportTemplatesAsset.name, path.join(godotWorkingDir, templatesPathString));
+
         core.info('Finished extracting the files!');
 
         let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
