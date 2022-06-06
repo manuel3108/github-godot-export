@@ -1,3 +1,5 @@
+name: Example 2 (Mono)
+
 on:
     push:
         branches:
