@@ -107,7 +107,7 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
 
 async function compressFile(fileName, destination) {
     return new Promise((resolve) => {
-        const myStream = Seven.add(fileName, destination, {
+        const myStream = Seven.add(destination, fileName, {
             $progress: false,
             noRootDuplication: true,
         });
