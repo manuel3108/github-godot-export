@@ -6,6 +6,7 @@ const request = require('request');
 const Seven = require('node-7z');
 const { exec } = require('@actions/exec');
 const ini = require('ini');
+const glob = require('glob');
 
 const godotWorkingDir = './.godot';
 
@@ -14,6 +15,7 @@ async function run() {
         const godotVersion = core.getInput('godot_version');
         const useMono = core.getInput('use_mono');
         const baseDir = core.getInput('base_dir');
+        const zipExportIfMultipleFiles = core.getInput('zip_export_if_multiple_files');
 
         core.info(`Godot version: ${godotVersion}`);
         core.info(`Use Mono: ${useMono}`);
@@ -62,13 +64,51 @@ async function run() {
 
         var config = ini.parse(fs.readFileSync(path.join(baseDir, 'export_presets.cfg'), 'utf-8'));
         const exportTemplates = Object.entries(config.preset).map(([_, value]) => value);
-        exportTemplates.forEach((exportTemplate) => {
+        exportTemplates.forEach(async (exportTemplate) => {
             fs.mkdirSync(exportTemplate.export_path, { recursive: true });
-            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path, '--verbose']);
+            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
+
+            if (zipExportIfMultipleFiles) {
+                const exportDirectoryName = path.dirname(exportTemplate.export_path);
+                var files = glob.sync(`${exportDirectoryName}/**/*.*`);
+                if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
+                    core.info(`Found ${files.length} files in ${exportDirectoryName}. Zipping files...`);
+
+                    await compressFile(`${exportDirectoryName}`, `${exportDirectoryName}/${exportDirectoryName}.zip`);
+
+                    core.info(`Finished zipping files!`);
+                    core.info(`Deleting zipped files...`);
+
+                    files.forEach((file) => {
+                        fs.unlinkSync(file);
+                    });
+
+                    core.info(`Finished deleting files!`);
+                } else {
+                    core.info(`Found ${files.length} files in ${exportDirectoryName}. Skipping zipping...`);
+
+                    const fileExtensions = path.extname(files[0]);
+                    fs.renameSync(files[0], `${exportDirectoryName}/${exportDirectoryName}${fileExtensions}`);
+
+                    core.info(`Finished renaming files!`);
+                }
+            }
         });
     } catch (error) {
         core.setFailed(error.message);
     }
+}
+
+async function compressFile(fileName, destination) {
+    return new Promise((resolve) => {
+        const myStream = Seven.add(fileName, destination, {
+            $progress: false,
+            noRootDuplication: true,
+        });
+        myStream.on('end', function () {
+            resolve();
+        });
+    });
 }
 
 async function extractFile(fileName, destination) {
