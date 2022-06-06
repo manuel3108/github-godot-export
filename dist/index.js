@@ -46776,7 +46776,6 @@ const { exec } = __nccwpck_require__(1514);
 
 const godotWorkingDir = './.godot';
 
-// most @actions toolkit packages have async methods
 async function run() {
     try {
         const godotVersion = core.getInput('godot_version');
@@ -46822,12 +46821,12 @@ async function run() {
 
         core.info('Finished extracting the files!');
 
-        let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
-        godotExecutable = path.resolve(godotExecutable);
+        // let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
+        // godotExecutable = path.resolve(godotExecutable);
 
-        exportTemplates.forEach((exportTemplate) => {
-            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate}`, 'some_name.exe', '--verbose']);
-        });
+        // exportTemplates.forEach((exportTemplate) => {
+        //     exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate}`, 'some_name.exe', '--verbose']);
+        // });
     } catch (error) {
         core.setFailed(error.message);
     }

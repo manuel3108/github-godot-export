@@ -16,5 +16,5 @@ jobs:
                   use_mono: true
                   base_dir: ./examples/godot_3.4.4_mono/
                   export_templates: '["Linux/X11"]'
-            # - name: Setup tmate session
-            #   uses: mxschmitt/action-tmate@v3
+            - name: Setup tmate session
+              uses: mxschmitt/action-tmate@v3
