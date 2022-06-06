@@ -13,13 +13,7 @@ inputs:
         description: 'base directory'
         required: true
         default: './'
-    zip_export_if_multiple_files:
-        description: 'zip the export for a specific platform'
-        required: true
-        default: 'true'
-outputs:
-    time: # output will be available to future steps
-        description: 'The current time after waiting'
+
 runs:
     using: 'node16'
     main: 'dist/index.js'

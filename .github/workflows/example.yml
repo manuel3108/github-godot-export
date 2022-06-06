@@ -15,6 +15,5 @@ jobs:
                   godot_version: 3.4.4-stable
                   use_mono: true
                   base_dir: ./examples/godot_3.4.4_mono/
-                  zip_export_if_multiple_files: true
             - name: Setup tmate session
               uses: mxschmitt/action-tmate@v3

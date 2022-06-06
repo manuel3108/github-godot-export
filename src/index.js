@@ -15,7 +15,6 @@ async function run() {
         const godotVersion = core.getInput('godot_version');
         const useMono = core.getInput('use_mono');
         const baseDir = core.getInput('base_dir');
-        const zipExportIfMultipleFiles = core.getInput('zip_export_if_multiple_files');
 
         core.info(`Godot version: ${godotVersion}`);
         core.info(`Use Mono: ${useMono}`);
@@ -68,31 +67,29 @@ async function run() {
             fs.mkdirSync(exportTemplate.export_path, { recursive: true });
             await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
 
-            if (zipExportIfMultipleFiles) {
-                const exportDirectoryPath = path.dirname(exportTemplate.export_path);
-                const exportDirectoryName = path.basename(exportDirectoryPath);
-                var files = glob.sync(`${exportDirectoryPath}/**/*.*`);
-                if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
-                    core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
+            const exportDirectoryPath = path.dirname(path.join(baseDir, exportTemplate.export_path));
+            const exportDirectoryName = path.basename(exportDirectoryPath);
+            var files = glob.sync(`${exportDirectoryPath}/**/*.*`);
+            if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
+                core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
-                    await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
+                await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
 
-                    core.info(`Finished zipping files!`);
-                    core.info(`Deleting zipped files...`);
+                core.info(`Finished zipping files!`);
+                core.info(`Deleting zipped files...`);
 
-                    files.forEach((file) => {
-                        fs.unlinkSync(file);
-                    });
+                files.forEach((file) => {
+                    fs.unlinkSync(file);
+                });
 
-                    core.info(`Finished deleting files!`);
-                } else {
-                    core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
+                core.info(`Finished deleting files!`);
+            } else {
+                core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
 
-                    const fileExtensions = path.extname(files[0]);
-                    fs.renameSync(files[0], `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`);
+                const fileExtensions = path.extname(files[0]);
+                fs.renameSync(files[0], `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`);
 
-                    core.info(`Finished renaming files!`);
-                }
+                core.info(`Finished renaming files!`);
             }
         });
     } catch (error) {
