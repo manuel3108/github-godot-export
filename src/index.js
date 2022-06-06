@@ -66,7 +66,7 @@ async function run() {
         const exportTemplates = Object.entries(config.preset).map(([_, value]) => value);
         exportTemplates.forEach(async (exportTemplate) => {
             fs.mkdirSync(exportTemplate.export_path, { recursive: true });
-            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
+            await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
 
             if (zipExportIfMultipleFiles) {
                 const exportDirectoryPath = path.dirname(exportTemplate.export_path);
