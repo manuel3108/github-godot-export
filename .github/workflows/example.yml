@@ -9,8 +9,6 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v2.0.0
-            - name: Setup tmate session
-              uses: mxschmitt/action-tmate@v3
             - name: export godot
               uses: manuel3108/github-godot-export@main
               with:
@@ -18,3 +16,5 @@ jobs:
                   use_mono: true
                   base_dir: ./examples/godot_3.4.4_mono/
                   export_templates: '["Linux/X11"]'
+            - name: Setup tmate session
+              uses: mxschmitt/action-tmate@v3

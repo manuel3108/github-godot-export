@@ -46817,7 +46817,7 @@ async function run() {
 
         const templatesPathString = `/home/runner/.local/share/godot/templates/${godotVersion}${useMono ? '.mono' : ''}/`;
         fs.mkdirSync(templatesPathString, { recursive: true });
-        await extractFile(exportTemplatesAsset.name, path.join(godotWorkingDir, templatesPathString));
+        await extractFile(exportTemplatesAsset.name, templatesPathString);
 
         core.info('Finished extracting the files!');
 
