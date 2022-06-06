@@ -63,7 +63,8 @@ async function run() {
 
         var config = ini.parse(fs.readFileSync(path.join(baseDir, 'export_presets.cfg'), 'utf-8'));
         const exportTemplates = Object.entries(config.preset).map(([_, value]) => value);
-        exportTemplates.forEach(async (exportTemplate) => {
+
+        for (const exportTemplate of exportTemplates) {
             fs.mkdirSync(exportTemplate.export_path, { recursive: true });
             await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
 
@@ -91,7 +92,7 @@ async function run() {
 
                 core.info(`Finished renaming files!`);
             }
-        });
+        }
     } catch (error) {
         core.setFailed(error.message);
     }
