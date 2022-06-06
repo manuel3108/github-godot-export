@@ -47,18 +47,19 @@ async function run() {
 
         await extractFile(headlessGodotAsset.name, godotWorkingDir);
 
-        const templatesPathString = `/home/runner/.local/share/godot/templates/${godotVersion}${useMono ? '.mono' : ''}/`;
+        const templatesPathString = `/home/runner/.local/share/godot/templates/`;
         fs.mkdirSync(templatesPathString, { recursive: true });
         await extractFile(exportTemplatesAsset.name, templatesPathString);
+        fs.renameSync(`${templatesPathString}templates`, `${templatesPathString}${godotVersion}${useMono ? '.mono' : ''}`);
 
         core.info('Finished extracting the files!');
 
-        // let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
-        // godotExecutable = path.resolve(godotExecutable);
+        let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
+        godotExecutable = path.resolve(godotExecutable);
 
-        // exportTemplates.forEach((exportTemplate) => {
-        //     exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate}`, 'some_name.exe', '--verbose']);
-        // });
+        exportTemplates.forEach((exportTemplate) => {
+            exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate}`, 'some_name.exe', '--verbose']);
+        });
     } catch (error) {
         core.setFailed(error.message);
     }
