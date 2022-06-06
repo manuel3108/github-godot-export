@@ -49,7 +49,7 @@ async function run() {
         const templatesPathString = `/home/runner/.local/share/godot/templates/`;
         fs.mkdirSync(templatesPathString, { recursive: true });
         await extractFile(exportTemplatesAsset.name, templatesPathString);
-        fs.renameSync(`${templatesPathString}templates`, `${templatesPathString}${godotVersion}${useMono ? '.mono' : ''}`);
+        // fs.renameSync(`${templatesPathString}templates`, `${templatesPathString}${godotVersion}${useMono ? '.mono' : ''}`);
 
         core.info('Finished extracting the files!');
 
