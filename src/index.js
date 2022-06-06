@@ -81,28 +81,28 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
         fs.mkdirSync(exportDirectoryPath, { recursive: true });
         await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportPath]);
 
-        var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
-        if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
-            core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
+        // var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
+        // if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
+        //     core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
-            await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
+        //     await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
 
-            core.info(`Finished zipping files!`);
-            core.info(`Deleting zipped files...`);
+        //     core.info(`Finished zipping files!`);
+        //     core.info(`Deleting zipped files...`);
 
-            files.forEach((file) => {
-                fs.unlinkSync(file);
-            });
+        //     files.forEach((file) => {
+        //         fs.unlinkSync(file);
+        //     });
 
-            core.info(`Finished deleting files!`);
-        } else {
-            core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
+        //     core.info(`Finished deleting files!`);
+        // } else {
+        //     core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
 
-            const fileExtensions = path.extname(files[0]);
-            fs.renameSync(files[0], `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`);
+        //     const fileExtensions = path.extname(files[0]);
+        //     fs.renameSync(files[0], `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`);
 
-            core.info(`Finished renaming files!`);
-        }
+        //     core.info(`Finished renaming files!`);
+        // }
     }
 }
 
