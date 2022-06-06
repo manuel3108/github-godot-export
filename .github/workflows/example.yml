@@ -9,6 +9,11 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v2.0.0
+            - name: Read version.txt
+              id: version
+              uses: juliangruber/read-file-action@v1
+              with:
+                path: ./examples/godot_3.4.4_mono/version.txt
             - name: export godot
               id: godot
               uses: manuel3108/github-godot-export@main
@@ -21,5 +26,6 @@ jobs:
               with:
                 artifacts: ${{ steps.godot.outputs.artifacts }}
                 generateReleaseNotes: true
+                tag: ${{ steps.version.outputs.content }}
                 token: ${{ secrets.GITHUB_TOKEN }}
 
