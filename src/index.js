@@ -75,11 +75,12 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
 
     for (const exportTemplate of exportTemplates) {
         var exportPath = path.join(baseDir, exportTemplate.export_path);
-        fs.mkdirSync(exportPath, { recursive: true });
-        await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
-
         const exportDirectoryPath = path.dirname(path.join(baseDir, exportTemplate.export_path));
         const exportDirectoryName = path.basename(exportDirectoryPath);
+
+        fs.mkdirSync(exportDirectoryPath, { recursive: true });
+        await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportPath]);
+
         var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
         if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
             core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
