@@ -50312,13 +50312,13 @@ async function run() {
                 await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
 
                 core.info(`Finished zipping files!`);
-                core.info(`Deleting zipped files...`);
+                // core.info(`Deleting zipped files...`);
 
-                files.forEach((file) => {
-                    fs.unlinkSync(file);
-                });
+                // files.forEach((file) => {
+                //     fs.unlinkSync(file);
+                // });
 
-                core.info(`Finished deleting files!`);
+                // core.info(`Finished deleting files!`);
             } else {
                 core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
 
