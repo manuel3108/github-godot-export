@@ -50253,6 +50253,7 @@ async function run() {
 
         core.info(`Godot version: ${godotVersion}`);
         core.info(`Use Mono: ${useMono}`);
+        core.info(`Base directory: ${baseDir}`);
 
         const godotExecutable = await downloadAndPrepareGodot(godotVersion, useMono);
         await buildAndPostProcess(godotExecutable, baseDir);
@@ -50321,7 +50322,7 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
             core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
             const fileName = `${exportDirectoryPath}/${exportDirectoryName}.zip`;
-            await compressFile(`${exportDirectoryPath}`, fileName);
+            await compressFile(`./${exportDirectoryPath}`, fileName);
             artifactFiles.push(fileName);
 
             core.info(`Finished zipping files!`);
