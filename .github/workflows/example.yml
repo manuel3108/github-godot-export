@@ -10,10 +10,16 @@ jobs:
             - name: checkout
               uses: actions/checkout@v2.0.0
             - name: export godot
+              id: godot
               uses: manuel3108/github-godot-export@main
               with:
                   godot_version: 3.4.4-stable
                   use_mono: true
                   base_dir: ./examples/godot_3.4.4_mono/
-            - name: Setup tmate session
-              uses: mxschmitt/action-tmate@v3
+            - name: create release
+              uses: ncipollo/release-action@v1
+              with:
+                artifacts: ${{ steps.godot.outputs.artifacts }}
+                generateReleaseNotes: true
+                token: ${{ secrets.GITHUB_TOKEN }}
+

@@ -72,9 +72,9 @@ async function downloadAndPrepareGodot(godotVersion, useMono) {
 async function buildAndPostProcess(godotExecutable, baseDir) {
     var config = ini.parse(fs.readFileSync(path.join(baseDir, 'export_presets.cfg'), 'utf-8'));
     const exportTemplates = Object.entries(config.preset).map(([_, value]) => value);
+    const artifactFiles = [];
 
     for (const exportTemplate of exportTemplates) {
-        var exportPath = path.join(baseDir, exportTemplate.export_path);
         const exportDirectoryPath = path.dirname(path.join(baseDir, exportTemplate.export_path));
         const exportDirectoryName = path.basename(exportDirectoryPath);
 
@@ -85,7 +85,9 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
         if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
             core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
-            await compressFile(`${exportDirectoryPath}`, `${exportDirectoryPath}/${exportDirectoryName}.zip`);
+            const fileName = `${exportDirectoryPath}/${exportDirectoryName}.zip`;
+            await compressFile(`${exportDirectoryPath}`, fileName);
+            artifactFiles.push(fileName);
 
             core.info(`Finished zipping files!`);
             core.info(`Deleting zipped files...`);
@@ -99,11 +101,15 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
             core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
 
             const fileExtensions = path.extname(files[0]);
-            fs.renameSync(files[0], `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`);
+            const fileName = `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`;
+            fs.renameSync(files[0], fileName);
+            artifactFiles.push(fileName);
 
             core.info(`Finished renaming files!`);
         }
     }
+    core.info(artifactFiles.join(','));
+    core.setOutput('artifacts', artifactFiles.join(','));
 }
 
 async function compressFile(fileName, destination) {
