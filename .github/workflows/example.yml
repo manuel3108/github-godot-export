@@ -15,4 +15,4 @@ jobs:
                   godot_version: 3.4.4-stable
                   use_mono: true
                   base_dir: ./examples/godot_3.4.4_mono/
-                  export_templates: '["Windows Desktop"]'
+                  export_templates: '["Linux/X11"]'
