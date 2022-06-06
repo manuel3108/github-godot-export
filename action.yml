@@ -9,10 +9,6 @@ inputs:
         description: 'whether to use the mono builds'
         required: true
         default: 'false'
-    base_dir:
-        description: 'base directory'
-        required: true
-        default: './'
     export_templates:
         description: 'describes the templates that should be exported'
         required: true
