@@ -15,7 +15,7 @@ jobs:
               id: version
               uses: juliangruber/read-file-action@v1
               with:
-                  path: ./examples/godot_3.4.4/version.txt
+                  path: ./examples/godot_3.4.4_mono/version.txt
 
             # Call the export godot action to build and zip the executables for the different targets
             # Provides a comma separated list of generated files, used to i.e. generate a new release
@@ -24,8 +24,8 @@ jobs:
               uses: manuel3108/github-godot-export@main
               with:
                   godot_version: 3.4.4-stable
-                  use_mono: false
-                  base_dir: ./examples/godot_3.4.4/
+                  use_mono: true
+                  base_dir: ./examples/godot_3.4.4_mono/
 
             # Use the generated artifacts and the version read from a file to create a new github release
             - name: create release

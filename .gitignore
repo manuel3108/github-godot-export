@@ -2,6 +2,8 @@ node_modules/
 .godot/
 examples/godot_3.4.4_mono/.mono/
 examples/godot_3.4.4_mono/Builds/
+examples/godot_3.4.4/.mono/
+examples/godot_3.4.4/Builds/
 
 # Editors
 .vscode/
