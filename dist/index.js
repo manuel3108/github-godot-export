@@ -50311,7 +50311,7 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
     for (const exportTemplate of exportTemplates) {
         var exportPath = path.join(baseDir, exportTemplate.export_path);
         fs.mkdirSync(exportPath, { recursive: true });
-        await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportPath]);
+        await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
 
         const exportDirectoryPath = path.dirname(path.join(baseDir, exportTemplate.export_path));
         const exportDirectoryName = path.basename(exportDirectoryPath);
