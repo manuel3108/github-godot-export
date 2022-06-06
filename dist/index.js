@@ -50242,6 +50242,7 @@ const Seven = __nccwpck_require__(8920);
 const { exec } = __nccwpck_require__(1514);
 const ini = __nccwpck_require__(45);
 const glob = __nccwpck_require__(1957);
+const os = __nccwpck_require__(2037);
 
 const godotWorkingDir = './.godot';
 
@@ -50256,10 +50257,20 @@ async function run() {
         core.info(`Base directory: ${baseDir}`);
 
         const godotExecutable = await downloadAndPrepareGodot(godotVersion, useMono);
+        setupEditorSettings();
         await buildAndPostProcess(godotExecutable, baseDir);
     } catch (error) {
         core.setFailed(error.message);
     }
+}
+
+function setupEditorSettings() {
+    const editorSettingsFileName = 'editor_settings-3.tres';
+    const settingsFolderPath = path.resolve(path.join(os.homedir(), '/.config/godot'));
+    const editorSettingsDist = path.join(__dirname, editorSettingsFileName);
+
+    fs.mkdirSync(settingsFolderPath, { recursive: true });
+    fs.copyFileSync(editorSettingsDist, path.join(settingsFolderPath, editorSettingsFileName));
 }
 
 async function downloadAndPrepareGodot(godotVersion, useMono) {
@@ -50322,7 +50333,7 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
             core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
             const fileName = `${exportDirectoryPath}/${exportDirectoryName}.zip`;
-            await compressFile(`./${exportDirectoryPath}`, fileName);
+            await compressFile(`./${exportDirectoryPath}/*`, fileName);
             artifactFiles.push(fileName);
 
             core.info(`Finished zipping files!`);
@@ -50351,8 +50362,8 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
 async function compressFile(fileName, destination) {
     return new Promise((resolve) => {
         const myStream = Seven.add(destination, fileName, {
+            $raw: [],
             $progress: false,
-            noRootDuplication: true,
         });
         myStream.on('end', function () {
             resolve();
@@ -50364,7 +50375,6 @@ async function extractFile(fileName, destination) {
     return new Promise((resolve) => {
         const myStream = Seven.extractFull(fileName, destination, {
             $progress: false,
-            noRootDuplication: true,
         });
         myStream.on('end', function () {
             resolve();
