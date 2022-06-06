@@ -46769,6 +46769,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const { Octokit } = __nccwpck_require__(6762);
 const fs = __nccwpck_require__(7147);
+const path = __nccwpck_require__(1017);
 const request = __nccwpck_require__(8699);
 const Seven = __nccwpck_require__(8920);
 const { exec } = __nccwpck_require__(1514);
@@ -46816,7 +46817,8 @@ async function run() {
 
         core.info('Finished extracting the files!');
 
-        const godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
+        let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
+        godotExecutable = path.resolve(godotExecutable);
 
         exportTemplates.forEach((exportTemplate) => {
             exec(godotExecutable, ['--export', `"${exportTemplate}"`, 'some_name.exe'], {

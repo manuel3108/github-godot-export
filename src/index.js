@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { Octokit } = require('@octokit/core');
 const fs = require('fs');
+const path = require('path');
 const request = require('request');
 const Seven = require('node-7z');
 const { exec } = require('@actions/exec');
@@ -48,7 +49,8 @@ async function run() {
 
         core.info('Finished extracting the files!');
 
-        const godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
+        let godotExecutable = `${godotWorkingDir}/${headlessGodotAsset.name.replace('.zip', '')}/${headlessGodotAsset.name.replace('_64.zip', '.64')}`;
+        godotExecutable = path.resolve(godotExecutable);
 
         exportTemplates.forEach((exportTemplate) => {
             exec(godotExecutable, ['--export', `"${exportTemplate}"`, 'some_name.exe'], {
