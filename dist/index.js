@@ -50326,34 +50326,34 @@ async function buildAndPostProcess(godotExecutable, baseDir) {
         const exportDirectoryName = path.basename(exportDirectoryPath);
 
         fs.mkdirSync(exportDirectoryPath, { recursive: true });
-        // await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
+        await exec(godotExecutable, ['--path', baseDir, '--export', `${exportTemplate.name}`, exportTemplate.export_path]);
 
-        // var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
-        // if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
-        //     core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
+        var files = glob.sync(`${exportDirectoryPath}/**/*.*`, { nodir: true });
+        if (files.length > 1 && exportTemplate.platform != 'Mac OSX') {
+            core.info(`Found ${files.length} files in ${exportDirectoryPath}. Zipping files...`);
 
-        //     const fileName = `${exportDirectoryPath}/${exportDirectoryName}.zip`;
-        //     await compressFile(`./${exportDirectoryPath}/*`, fileName);
-        //     artifactFiles.push(fileName);
+            const fileName = `${exportDirectoryPath}/${exportDirectoryName}.zip`;
+            await compressFile(`./${exportDirectoryPath}/*`, fileName);
+            artifactFiles.push(fileName);
 
-        //     core.info(`Finished zipping files!`);
-        //     core.info(`Deleting zipped files...`);
+            core.info(`Finished zipping files!`);
+            core.info(`Deleting zipped files...`);
 
-        //     files.forEach((file) => {
-        //         fs.unlinkSync(file);
-        //     });
+            files.forEach((file) => {
+                fs.unlinkSync(file);
+            });
 
-        //     core.info(`Finished deleting files!`);
-        // } else {
-        //     core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
+            core.info(`Finished deleting files!`);
+        } else {
+            core.info(`Found ${files.length} files in ${exportDirectoryPath}. Skipping zipping...`);
 
-        //     const fileExtensions = path.extname(files[0]);
-        //     const fileName = `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`;
-        //     fs.renameSync(files[0], fileName);
-        //     artifactFiles.push(fileName);
+            const fileExtensions = path.extname(files[0]);
+            const fileName = `${exportDirectoryPath}/${exportDirectoryName}${fileExtensions}`;
+            fs.renameSync(files[0], fileName);
+            artifactFiles.push(fileName);
 
-        //     core.info(`Finished renaming files!`);
-        // }
+            core.info(`Finished renaming files!`);
+        }
     }
     core.info(artifactFiles.join(','));
     core.setOutput('artifacts', artifactFiles.join(','));
